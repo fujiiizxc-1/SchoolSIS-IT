@@ -1,0 +1,13 @@
+﻿<!doctype html><meta charset="utf-8"><title>Student System Architecture</title>
+<style>@page{size:A4 landscape;margin:12mm}body{font:16px Arial;color:#162e34;margin:0}h1{font-size:31px}p{line-height:1.45}.flow{display:grid;grid-template-columns:1fr 108px 1fr 108px 1fr;align-items:center;margin:34px 0}.box{border:2px solid #16736b;padding:18px;border-radius:10px;background:#edf6f4;min-height:205px}.link{text-align:center;font-size:12px}.link b{display:block;font-size:24px;margin:6px}.auth{border-top:1px solid #16736b;padding-top:10px}small{font-size:13px}</style>
+<h1>Student Information System Architecture</h1>
+<p><strong>Users</strong> &nbsp; Student &middot; Teacher &middot; Administrator<br>Each user opens the system on a phone, tablet, or computer.</p>
+<div class="flow">
+<div class="box"><small>PRESENTATION LAYER</small><h2>User Interface</h2><p>Laravel Blade pages rendered as HTML in the browser. Users submit registration, enrollment, and grading forms.</p></div>
+<div class="link">Network connection<br>HTTP(S) request<b>&rarr;</b><b>&larr;</b>HTML response</div>
+<div class="box"><small>APPLICATION LAYER</small><h2>Application Server</h2><p>Laravel routes requests, validates input, and applies business rules.</p><p class="auth"><strong>Authentication Module</strong><br>Sessions, password hashing, CSRF protection, and role and record access checks.</p></div>
+<div class="link">Database connection<br>Eloquent / SQL<b>&rarr;</b><b>&larr;</b>Rows or result</div>
+<div class="box"><small>DATA LAYER</small><h2>Database Server</h2><p>MySQL stores users, students, teachers, subjects, enrollments, and grades. Constraints maintain record integrity.</p></div>
+</div>
+<p><strong>Registration</strong> &nbsp; The browser posts the form. Laravel validates it and saves the user and student in one transaction. After MySQL commits both rows, Laravel redirects to a page that confirms registration.</p>
+<p><strong>Hardware</strong> &nbsp; A user device and a host running Laravel and MySQL. The servers can share one physical host for the lab.</p>

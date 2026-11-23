@@ -1,0 +1,38 @@
+﻿<!doctype html><meta charset="utf-8"><title>System Integration Lab Activity</title>
+<style>@page{size:A4;margin:17mm}body{font:13px/1.5 Arial;color:#17292c;margin:0}h1,h2{color:#115951;line-height:1.2}h1{font-size:30px;margin-bottom:12px}h2{font-size:20px;margin:20px 0 10px}p{margin:8px 0}table{border-collapse:collapse;width:100%}th,td{text-align:left;vertical-align:top;border:1px solid #a6bdb8;padding:7px}th{background:#e3f1ed}li{margin:0 0 10px}li p{margin:3px 0}.page{break-before:page}</style>
+<h1>Student Information System</h1>
+<p>Designing and Integrating a Computer-Based Information System</p>
+<h2>Part A &middot; System components</h2>
+<table><thead><tr><th>Component</th><th>Description and example</th><th>Why it matters</th></tr></thead><tbody>
+<tr><th>User Interface</th><td>Blade renders the registration form, field errors, and confirmation in the browser.</td><td>Students can submit information and correct mistakes before continuing.</td></tr>
+<tr><th>Application Layer</th><td>Laravel routes the registration request, validates fields, and saves both records in a transaction.</td><td>Shared rules apply consistently to every request.</td></tr>
+<tr><th>Database Layer</th><td>MySQL stores the user and linked student profile. Unique keys protect the email and student ID.</td><td>Records persist across sessions and duplicate identifiers are prevented.</td></tr>
+<tr><th>Network Layer</th><td>The browser uses HTTP locally or HTTPS in deployment. Laravel connects to MySQL using its database driver.</td><td>Requests and results can move between components. HTTPS protects data in transit.</td></tr>
+<tr><th>Hardware Layer</th><td>A phone or computer runs the browser. A host runs PHP and MySQL.</td><td>These devices provide the processing, storage, and network access needed by each tier.</td></tr>
+<tr><th>Security Layer</th><td>Laravel hashes passwords and checks sessions, CSRF tokens, roles, and record permissions.</td><td>Only authorized users can view or change protected records.</td></tr>
+</tbody></table>
+<h2>Part B &middot; Architecture</h2>
+<p>See the accompanying Student_System_Architecture.pdf for the three tiers, the user roles, and the two-way request path.</p>
+<h2>Part C &middot; Registration integration</h2>
+<p>The browser sends the registration form to Laravel over HTTP. Laravel checks the form token and validates the name, student ID, course, email, and password. MySQL commits the account and linked profile together. The application then redirects to sign-in with confirmation.</p>
+<p>During the demonstration, compare the saved user ID and the profile's user ID in MySQL. Verify that the password column contains a hash, then sign in, sign out, and sign back in to retrieve the saved profile. See Demo_Steps.md for the walkthrough and screenshots.</p><p>In the recorded Chrome run, fictional student QA-20261123-01 registered at 320 px. MySQL 8.4.13 confirmed one linked account and profile with a bcrypt hash. The saved ID and course appeared after signing in again.</p>
+<section class="page">
+<h2>Part D &middot; Analysis</h2>
+<ol>
+<li><strong>How does the user interface communicate with the application server?</strong><p>The browser sends an HTTP request to a Laravel route. Laravel processes it and returns a rendered HTML page or a redirect. A trusted deployment should use HTTPS.</p></li>
+<li><strong>What is the role of the database server?</strong><p>MySQL retains academic and account records and enforces relationships and uniqueness. Laravel retrieves these records when rendering each user's permitted views.</p></li>
+<li><strong>What happens if the database server is unavailable?</strong><p>Requests that need the database can fail, so users may be unable to sign in, read records, or save changes. The application should show an error and confirm a save only after the database commits it.</p></li>
+<li><strong>Why is authentication important?</strong><p>Authentication establishes who is making the request. Authorization then uses that identity to limit access, such as permitting teachers to grade only students in their assigned subjects.</p></li>
+<li><strong>How does integration improve organizational performance?</strong><p>Registration, enrollment, and grades use linked records. Staff spend less time re-entering and reconciling information, and students can retrieve updates directly.</p></li>
+</ol>
+<h2>Section VIII &middot; Reflection</h2>
+<ol>
+<li><strong>Integration and architecture</strong><p>Architecture defines the tiers and their responsibilities. Integration connects those tiers so a task can run across them.</p></li>
+<li><strong>Scalability</strong><p>As student traffic and records grow, the system must remain responsive. Clear tier boundaries let operators improve constrained resources independently.</p></li>
+<li><strong>Integration challenges</strong><p>Components can disagree about identifiers, data format, or permissions. Network failures and incompatible versions can also interrupt requests.</p></li>
+<li><strong>Security and reliability</strong><p>A central application layer enforces permissions for database access. Transactions and database constraints keep linked records consistent when writes fail or users submit duplicates.</p></li>
+<li><strong>What the project demonstrates</strong><p>Designing registration showed how a single form depends on routing, validation, authentication, and durable storage. Checking the profile after signing in again is an effective way to demonstrate persistence.</p></li>
+</ol>
+<h2>Section IX &middot; Conclusion</h2>
+<p>The SIS brings a browser interface, Laravel application, and MySQL data store together to support registration and academic records. Each tier has a defined job, and the integration lets users follow one workflow from form submission through saved, protected data. Clear architecture makes that workflow easier to test and maintain.</p>
+</section>
